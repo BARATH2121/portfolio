@@ -3,18 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Barath - Portfolio</title>
+    <title>Barath M - Professional Portfolio</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <!-- 3D Background Canvas -->
+    <canvas id="bg3d"></canvas>
+    
     <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">Barath</div>
+            <div class="logo">Barath M</div>
             <ul class="nav-menu">
                 <li><a href="#home" class="nav-link">Home</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#experience" class="nav-link">Experience</a></li>
                 <li><a href="#projects" class="nav-link">Projects</a></li>
                 <li><a href="#skills" class="nav-link">Skills</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
@@ -25,9 +29,14 @@
     <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <h1 class="hero-title">Hi, I'm Barath</h1>
-            <p class="hero-subtitle">Computer Science Student | Cognitive Systems | IoT Enthusiast</p>
-            <p class="hero-desc">Final-year student specializing in cognitive systems and IoT technologies. Passionate about building innovative mobile applications and smart systems.</p>
+            <h1 class="hero-title">Barath M</h1>
+            <p class="hero-subtitle">Computer Science Student | Cloud Technologies | Software Solutions</p>
+            <p class="hero-desc">B.Sc Computer Science with Cognitive Systems<br>Dr. N. G. P. Arts and Science College | Coimbatore, India</p>
+            <div class="hero-contact">
+                <p><i class="fas fa-phone"></i> +91 9789223360</p>
+                <p><i class="fas fa-envelope"></i> mbarath2121@gmail.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> Coimbatore - 641111</p>
+            </div>
             <a href="#projects" class="btn btn-primary">View My Work</a>
         </div>
     </section>
@@ -37,15 +46,160 @@
         <div class="container">
             <h2>About Me</h2>
             <div class="about-content">
-                <p>I'm a final-year Computer Science student with a specialization in Cognitive Systems. My passion lies in developing innovative mobile applications and IoT solutions. I have hands-on experience with Android development, cloud services (AWS), and full-stack web development.</p>
-                <p>My focus areas include:</p>
-                <ul class="skills-list">
-                    <li>Mobile Application Development (Android)</li>
-                    <li>Cognitive Computing & AI Integration</li>
-                    <li>IoT Systems & Smart Solutions</li>
-                    <li>Cloud Services (AWS)</li>
-                    <li>Full-Stack Development</li>
+                <p>I am a motivated computer science student with hands-on experience in software installation, cloud technologies, and customer service. Eager to contribute technical knowledge and problem-solving skills in a dynamic IT environment.</p>
+                <p><strong>Career Objective:</strong></p>
+                <ul class="objective-list">
+                    <li>Management Skills</li>
+                    <li>Creativity & Innovation</li>
+                    <li>Quick Learner</li>
+                    <li>Leadership Abilities</li>
                 </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="experience" class="education">
+        <div class="container">
+            <h2>Education & Experience</h2>
+            <div class="education-grid">
+                <!-- Education -->
+                <div class="edu-card">
+                    <h3><i class="fas fa-graduation-cap"></i> Education</h3>
+                    <div class="edu-item">
+                        <h4>B.Sc Computer Science with Cognitive Systems</h4>
+                        <p>Dr. N. G. P. Arts and Science College</p>
+                        <p class="year">2023 - 2026 (Ongoing - 4th Semester)</p>
+                        <p class="gpa">CGPA: 6.7/10</p>
+                    </div>
+                    <div class="edu-item">
+                        <h4>HSC 12th - Computer Science</h4>
+                        <p>N.G.R.A. H.S.S</p>
+                        <p class="year">2022 - 2023</p>
+                        <p class="gpa">Score: 54</p>
+                    </div>
+                    <div class="edu-item">
+                        <h4>HSC 11th - Computer Science</h4>
+                        <p>N.G.R.A. H.S.S</p>
+                        <p class="year">2021 - 2022</p>
+                        <p class="gpa">Score: 55</p>
+                    </div>
+                </div>
+
+                <!-- Work Experience -->
+                <div class="exp-card">
+                    <h3><i class="fas fa-briefcase"></i> Work Experience</h3>
+                    <div class="exp-item">
+                        <h4>Billing Expert</h4>
+                        <p><strong>D Mart Coimbatore</strong></p>
+                        <p class="year">2024 - Present</p>
+                        <ul>
+                            <li>Handle billing operations with accuracy and efficiency using POS systems</li>
+                            <li>Assist customers with product inquiries and support</li>
+                            <li>Manage cash handling and transaction records</li>
+                        </ul>
+                    </div>
+                    <div class="exp-item">
+                        <h4>Software & OS Installation Specialist</h4>
+                        <p><strong>Orange Computer Sales Service, Coimbatore</strong></p>
+                        <p class="year">2022 - 2024</p>
+                        <ul>
+                            <li>Installed and configured various operating systems and software packages</li>
+                            <li>Provided technical support and troubleshooting for hardware/software issues</li>
+                            <li>Assisted clients with system optimization and maintenance</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Internships & Certifications Section -->
+    <section id="certifications" class="certifications">
+        <div class="container">
+            <h2>Internships & Certifications</h2>
+            <div class="cert-grid">
+                <div class="cert-card accent-red">
+                    <h3>Infosys Springboard</h3>
+                    <ul>
+                        <li>Information Security - Jul 2025</li>
+                        <li>Introduction to Cyber Security - Jun 2025</li>
+                        <li>Cloud and Virtualization - Feb 2025</li>
+                        <li>Published: Cloud and Virtualization Book - Jan 2025</li>
+                        <li>Operational Research - Sep 2024</li>
+                    </ul>
+                </div>
+                <div class="cert-card">
+                    <h3>Other Certifications</h3>
+                    <ul>
+                        <li>PROMPT Infotech: Threat Analysis using Wireshark - Jul 2024</li>
+                        <li>NOBAL TECHNOLOGY: Cloud Technology (15 Days) - Completed</li>
+                        <li>Microsoft Office (Word, Excel, PowerPoint)</li>
+                        <li>OS Installation (Windows/Linux)</li>
+                        <li>System Configuration & Maintenance</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2>Technical Skills</h2>
+            <div class="skills-container">
+                <div class="skill-category">
+                    <h3>Cloud & Virtualization</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Azure</span>
+                        <span class="skill-tag">AWS</span>
+                        <span class="skill-tag accent-red">Cloud Architecture</span>
+                        <span class="skill-tag">Virtualization</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Security & Networking</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Cyber Security</span>
+                        <span class="skill-tag accent-red">Information Security</span>
+                        <span class="skill-tag">Wireshark</span>
+                        <span class="skill-tag">Threat Analysis</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Software & OS</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Windows</span>
+                        <span class="skill-tag">Linux</span>
+                        <span class="skill-tag accent-red">Software Installation</span>
+                        <span class="skill-tag">System Configuration</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Development & Tools</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Selenium</span>
+                        <span class="skill-tag">UIPath</span>
+                        <span class="skill-tag accent-red">Automation Testing</span>
+                        <span class="skill-tag">Manual Testing</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Design & Office</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Canva</span>
+                        <span class="skill-tag">AI Tools</span>
+                        <span class="skill-tag">Microsoft Word</span>
+                        <span class="skill-tag accent-red">Microsoft Excel</span>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Languages</h3>
+                    <div class="skill-tags">
+                        <span class="skill-tag">English</span>
+                        <span class="skill-tag accent-red">Tamil</span>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -55,116 +209,57 @@
         <div class="container">
             <h2>Featured Projects</h2>
             <div class="projects-grid">
-                <!-- Project 1 -->
                 <div class="project-card">
-                    <div class="project-header">Smart Campus Safety & Energy System</div>
-                    <p class="project-tech">Kotlin, IoT, Cognitive AI, Firebase</p>
-                    <p class="project-desc">An intelligent campus safety and energy management system using cognitive computing and IoT sensors.</p>
+                    <div class="project-header">Cloud Technology Implementation</div>
+                    <p class="project-tech">Cloud Architecture, Azure, AWS</p>
+                    <p class="project-desc">Comprehensive cloud technology solutions with focus on architecture, deployment, and virtualization.</p>
                     <div class="project-links">
-                        <a href="#" class="project-link">GitHub</a>
-                        <a href="#" class="project-link">Demo</a>
+                        <a href="#" class="project-link">Learn More</a>
                     </div>
                 </div>
 
-                <!-- Project 2 -->
                 <div class="project-card">
-                    <div class="project-header">Travel Companion App</div>
-                    <p class="project-tech">Android, Google Maps, Gemini AI, SOS Features</p>
-                    <p class="project-desc">A comprehensive travel application with real-time navigation, AI recommendations, and emergency SOS features.</p>
+                    <div class="project-header">Cyber Security Analysis</div>
+                    <p class="project-tech">Wireshark, Security, Threat Analysis</p>
+                    <p class="project-desc">In-depth threat analysis and network security monitoring using industry-standard tools.</p>
                     <div class="project-links">
-                        <a href="#" class="project-link">GitHub</a>
-                        <a href="#" class="project-link">Demo</a>
+                        <a href="#" class="project-link">Learn More</a>
                     </div>
                 </div>
 
-                <!-- Project 3 -->
                 <div class="project-card">
-                    <div class="project-header">Face Recognition Attendance System</div>
-                    <p class="project-tech">Python, AWS Rekognition, Node.js</p>
-                    <p class="project-desc">An automated attendance system using AWS Rekognition for facial recognition with real-time processing.</p>
+                    <div class="project-header">Operational Research</div>
+                    <p class="project-tech">Research, Analysis, Optimization</p>
+                    <p class="project-desc">Advanced operational research methodologies for problem-solving and optimization.</p>
                     <div class="project-links">
-                        <a href="#" class="project-link">GitHub</a>
-                        <a href="#" class="project-link">Demo</a>
+                        <a href="#" class="project-link">Learn More</a>
                     </div>
                 </div>
 
-                <!-- Project 4 -->
                 <div class="project-card">
-                    <div class="project-header">Expense Tracker</div>
-                    <p class="project-tech">Flutter, Firebase, Dart</p>
-                    <p class="project-desc">A cross-platform expense tracking application with real-time synchronization and analytics.</p>
+                    <div class="project-header">System Administration</div>
+                    <p class="project-tech">Windows, Linux, Configuration</p>
+                    <p class="project-desc">Complete system installation, configuration, and maintenance across multiple platforms.</p>
                     <div class="project-links">
-                        <a href="#" class="project-link">GitHub</a>
-                        <a href="#" class="project-link">Demo</a>
+                        <a href="#" class="project-link">Learn More</a>
                     </div>
                 </div>
 
-                <!-- Project 5 -->
                 <div class="project-card">
-                    <div class="project-header">Healthcare Application (DocRX)</div>
-                    <p class="project-tech">Android, Firebase, Medical APIs</p>
-                    <p class="project-desc">A healthcare platform connecting patients with medical professionals with appointment scheduling.</p>
+                    <div class="project-header">Automation Testing Framework</div>
+                    <p class="project-tech">Selenium, UIPath, Testing</p>
+                    <p class="project-desc">Development of robust automation testing frameworks for quality assurance.</p>
                     <div class="project-links">
-                        <a href="#" class="project-link">GitHub</a>
-                        <a href="#" class="project-link">Demo</a>
+                        <a href="#" class="project-link">Learn More</a>
                     </div>
                 </div>
 
-                <!-- Project 6 -->
                 <div class="project-card">
-                    <div class="project-header">Voice Assistant Application</div>
-                    <p class="project-tech">Android, Voice Recognition, NLP</p>
-                    <p class="project-desc">An intelligent voice assistant with natural language processing for smart command execution.</p>
+                    <div class="project-header">Technical Support & Solutions</div>
+                    <p class="project-tech">Customer Service, Troubleshooting</p>
+                    <p class="project-desc">Comprehensive technical support and hardware/software troubleshooting solutions.</p>
                     <div class="project-links">
-                        <a href="#" class="project-link">GitHub</a>
-                        <a href="#" class="project-link">Demo</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="skills">
-        <div class="container">
-            <h2>Skills & Technologies</h2>
-            <div class="skills-container">
-                <div class="skill-category">
-                    <h3>Programming Languages</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Kotlin</span>
-                        <span class="skill-tag">Java</span>
-                        <span class="skill-tag">JavaScript</span>
-                        <span class="skill-tag">Python</span>
-                        <span class="skill-tag">Dart</span>
-                    </div>
-                </div>
-                <div class="skill-category">
-                    <h3>Frameworks & Libraries</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Android Studio</span>
-                        <span class="skill-tag">React</span>
-                        <span class="skill-tag">React Native</span>
-                        <span class="skill-tag">Flutter</span>
-                        <span class="skill-tag">Node.js</span>
-                    </div>
-                </div>
-                <div class="skill-category">
-                    <h3>Cloud & Databases</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">AWS</span>
-                        <span class="skill-tag">Firebase</span>
-                        <span class="skill-tag">DynamoDB</span>
-                        <span class="skill-tag">Room Database</span>
-                    </div>
-                </div>
-                <div class="skill-category">
-                    <h3>Tools & Platforms</h3>
-                    <div class="skill-tags">
-                        <span class="skill-tag">Git/GitHub</span>
-                        <span class="skill-tag">VS Code</span>
-                        <span class="skill-tag">Android Studio</span>
-                        <span class="skill-tag">Figma</span>
+                        <a href="#" class="project-link">Learn More</a>
                     </div>
                 </div>
             </div>
@@ -175,19 +270,16 @@
     <section id="contact" class="contact">
         <div class="container">
             <h2>Get In Touch</h2>
-            <p class="contact-desc">I'm open to opportunities and collaborations. Feel free to reach out!</p>
+            <p class="contact-desc">Open to opportunities, internships, and collaborations. Feel free to reach out!</p>
             <div class="contact-links">
+                <a href="mailto:mbarath2121@gmail.com" class="contact-link">
+                    <i class="fas fa-envelope"></i> Email
+                </a>
                 <a href="https://github.com/BARATH2121" class="contact-link" target="_blank">
                     <i class="fab fa-github"></i> GitHub
                 </a>
-                <a href="https://linkedin.com" class="contact-link" target="_blank">
-                    <i class="fab fa-linkedin"></i> LinkedIn
-                </a>
-                <a href="mailto:barath@example.com" class="contact-link">
-                    <i class="fas fa-envelope"></i> Email
-                </a>
-                <a href="https://twitter.com" class="contact-link" target="_blank">
-                    <i class="fab fa-twitter"></i> Twitter
+                <a href="tel:+919789223360" class="contact-link">
+                    <i class="fas fa-phone"></i> Call
                 </a>
             </div>
         </div>
@@ -195,7 +287,7 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <p>&copy; 2025 Barath. All rights reserved.</p>
+        <p>&copy; 2025 Barath M. Computer Science Student | Coimbatore, India</p>
     </footer>
 
     <script src="script.js"></script>
