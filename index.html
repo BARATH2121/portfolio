@@ -6,6 +6,7 @@
   <title>Barath M - Professional Portfolio</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>.project-card, .glass-wedge { opacity: 1 !important; }</style>
 </head>
 <body>
   <canvas id="bg3d"></canvas>
@@ -117,7 +118,7 @@
   <section id="projects" class="projects">
     <div class="container">
       <h2 class="section-title">Featured Projects</h2>
-      <div class="projects-grid">
+      <div class="projects-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
         <div class="glass-wedge project-card">
           <h3>Smart Campus Safety & Energy System</h3>
           <p class="tags">IoT, Cognitive AI, Real-time Monitoring, Arduino</p>
