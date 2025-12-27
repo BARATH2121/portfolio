@@ -6,10 +6,10 @@
   <title>Barath M - Professional Portfolio</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  <style>.project-card, .glass-wedge { opacity: 1 !important; } display: flex; flex-direction: column;</style>
 </head>
 <body>
   <canvas id="bg3d"></canvas>
+  
   <nav class="navbar">
     <div class="nav-container">
       <div class="logo">Barath M</div>
@@ -25,91 +25,72 @@
   </nav>
 
   <section id="home" class="hero">
-    <div class="hero-wrapper">
-      <div class="profile-wrapper" style="margin-top:80px">
-        <img src="https://raw.githubusercontent.com/BARATH2121/portfolio/main/bara.jpg" alt="Barath M" class="profile-image" width="280" height="280">
+    <div class="hero-content">
+      <div class="profile-section">
+        <img src="https://raw.githubusercontent.com/BARATH2121/portfolio/main/bara.jpg" alt="Barath M" class="profile-image">
+        <h1 class="hero-title">Barath M</h1>
+        <p class="hero-subtitle">Full Stack Developer | Cloud Technologist | IoT Specialist</p>
+        <p class="hero-description">Computer Science Student specializing in Cognitive Systems & IoT</p>
       </div>
-      <h1 class="hero-title">Barath M</h1>
-      <p class="hero-subtitle">Computer Science Student | Cloud Technologies | Software Solutions</p>
-      <div class="info-glass">
-        <p class="info-item"><strong>B.Sc Computer Science with Cognitive Systems</strong></p>
-        <p class="info-item">Dr. N. G. P. Arts and Science College | Coimbatore, India</p>
-      </div>
-      <div class="contact-glass">
-        <div class="contact-item">
+      <div class="hero-info">
+        <div class="info-item">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>Coimbatore, India</span>
+        </div>
+        <div class="info-item">
           <i class="fas fa-phone"></i>
           <span>+91 9789223360</span>
         </div>
-        <div class="contact-item">
+        <div class="info-item">
           <i class="fas fa-envelope"></i>
           <span>mbarath2121@gmail.com</span>
         </div>
-        <div class="contact-item">
-          <i class="fas fa-map-marker-alt"></i>
-          <span>Coimbatore - 641111</span>
-        </div>
       </div>
-      <a href="#projects" class="btn-glass">View My Work</a>
+      <div class="hero-buttons">
+        <a href="#projects" class="btn btn-primary">View Projects</a>
+        <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+      </div>
     </div>
   </section>
 
   <section id="about" class="about">
     <div class="container">
       <h2 class="section-title">About Me</h2>
-      <div class="glass-wedge">
-        <p>I am a motivated computer science student with hands-on experience in software installation, cloud technologies, and customer service. Eager to contribute technical knowledge and problem-solving skills in a dynamic IT environment.</p>
-        <h4>Career Objective:</h4>
-        <ul class="objective-list">
-          <li>Management Skills</li>
-          <li>Creativity & Innovation</li>
-          <li>Quick Learner</li>
-          <li>Leadership Abilities</li>
-        </ul>
+      <div class="about-content">
+        <div class="about-text">
+          <p>I am a motivated computer science student with hands-on experience in software installation, cloud technologies, and customer service. Eager to contribute technical knowledge and problem-solving skills in a dynamic IT environment.</p>
+          <h3>Education</h3>
+          <p><strong>B.Sc Computer Science with Cognitive Systems</strong><br>Dr. N. G. P. Arts and Science College<br>Coimbatore, India<br>2023 - 2026 (Ongoing - 4th Semester)<br><strong>CGPA: 6.7/10</strong></p>
+        </div>
+        <div class="about-objectives">
+          <h3>Career Objectives</h3>
+          <ul class="objectives-list">
+            <li>Management Skills & Team Leadership</li>
+            <li>Creativity & Innovation in Problem Solving</li>
+            <li>Quick Learner with Strong Adaptability</li>
+            <li>Technical Excellence & Quality Delivery</li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
 
-  <section id="experience" class="education">
+  <section id="experience" class="experience">
     <div class="container">
-      <h2 class="section-title">Education & Experience</h2>
-      <div class="education-grid">
-        <div>
-          <h3 style="color: #93c5fd; margin-bottom: 1rem;"><i class="fas fa-graduation-cap"></i> Education</h3>
-          <div class="edu-item">
-            <h4>B.Sc Computer Science with Cognitive Systems</h4>
-            <p>Dr. N. G. P. Arts and Science College</p>
-            <p class="year">2023 - 2026 (Ongoing - 4th Semester)</p>
-            <p class="gpa">CGPA: 6.7/10</p>
+      <h2 class="section-title">Professional Experience</h2>
+      <div class="experience-grid">
+        <div class="experience-card">
+          <div class="experience-header">
+            <h3>Billing Expert</h3>
+            <span class="company">D Mart Coimbatore</span>
           </div>
-          <div class="edu-item">
-            <h4>HSC 12th - Computer Science</h4>
-            <p>N.G.R.A. H.S.S</p>
-            <p class="year">2022 - 2023</p>
-            <p class="gpa">Score: 54</p>
-          </div>
-        </div>
-        <div>
-          <h3 style="color: #93c5fd; margin-bottom: 1rem;"><i class="fas fa-briefcase"></i> Work Experience</h3>
-          <div class="exp-item">
-            <h4>Billing Expert</h4>
-            <p>D Mart Coimbatore</p>
-            <p class="year">2024 - Present</p>
-            <ul style="margin-left: 1rem; margin-top: 0.5rem;">
-              <li>Handle billing operations with accuracy and efficiency using POS systems</li>
-              <li>Assist customers with product inquiries and support</li>
-              <li>Manage cash handling and transaction records</li>
-            </ul>
-          </div>
-          <div class="exp-item">
-            <h4>Software & OS Installation Specialist</h4>
-            <p>Orange Computer Sales Service, Coimbatore</p>
-            <p class="year">2022 - 2024</p>
-            <ul style="margin-left: 1rem; margin-top: 0.5rem;">
-              <li>Installed and configured various operating systems and software packages</li>
-              <li>Provided technical support and troubleshooting for hardware/software issues</li>
-              <li>Assisted clients with system optimization and maintenance</li>
-            </ul>
-          </div>
+          <p class="period">2024 - Present</p>
+          <ul class="responsibilities">
+            <li>Handle billing operations with accuracy and efficiency using POS systems</li>
+            <li>Assist customers with product inquiries and provide excellent support</li>
+            <li>Maintain cash register accuracy and process transactions securely</li>
+            <li>Contribute to team efficiency and customer satisfaction goals</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -118,60 +99,42 @@
   <section id="projects" class="projects">
     <div class="container">
       <h2 class="section-title">Featured Projects</h2>
-      <div class="projects-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
-        <div class="glass-wedge project-card">
+      <div class="projects-grid">
+        <div class="project-card">
           <h3>Smart Campus Safety & Energy System</h3>
-          <p class="tags">IoT, Cognitive AI, Real-time Monitoring, Arduino</p>
-          <p>Integrated cognitive AI system for campus safety with real-time monitoring, emergency response optimiz; width: 100%; margin-top: 3rem;ation, and smart energy management using IoT sensors.</p>
-          <a href="#" class="project-link">Learn More →</a>
+          <p class="tags">IoT | Cognitive AI | Real-time Monitoring</p>
+          <p>Integrated IoT solution combining safety monitoring with energy optimization using cognitive computing for intelligent campus management.</p>
+          <a href="#" class="project-link">View Details →</a>
         </div>
-        <div class="glass-wedge project-card">
-          <h3>Travel Companion App</h3>
-          <p class="tags">React Native, Google Maps, Gemini AI, SOS Features</p>
-          <p>Mobile travel application with AI-powered recommendations, real-time navigation, emergency SOS system, and personalized travel suggestions using Gemini API.</p>
-          <a href="#" class="project-link">Learn More →</a>
+        <div class="project-card">
+          <h3>Travel Companion Application</h3>
+          <p class="tags">Google Maps API | Gemini AI | Real-time SOS</p>
+          <p>Comprehensive travel app with AI-powered recommendations, real-time location tracking, and emergency SOS features for traveler safety.</p>
+          <a href="#" class="project-link">View Details →</a>
         </div>
-        <div class="glass-wedge project-card">
-          <h3>Expense Tracker</h3>
-          <p class="tags">Flutter, Firebase, Analytics, Charts</p>
-          <p>Cross-platform expense tracking application with real-time data synchronization, advanced analytics, visual charts, and budget management features.</p>
-          <a href="#" class="project-link">Learn More →</a>
-        </div>
-        <div class="glass-wedge project-card">
-          <h3>Face Recognition Attendance System</h3>
-          <p class="tags">AWS Rekognition, Python, Real-time Processing</p>
-          <p>Automated attendance system using AWS Rekognition for face detection and identification with real-time processing and database integration.</p>
-          <a href="#" class="project-link">Learn More →</a>
-        </div>
-        <div class="glass-wedge project-card">
-          <h3>Healthcare Management System (DocRX)</h3>
-          <p class="tags">Full-stack, Database Design, Patient Management</p>
-          <p>Comprehensive healthcare platform for patient management, appointment scheduling, medical records, and prescription tracking with secure database design.</p>
-          <a href="#" class="project-link">Learn More →</a>
-        </div>
-        <div class="glass-wedge project-card">
-          <h3>Voice Assistant Application</h3>
-          <p class="tags">NLP, Voice Recognition, AI Chatbot</p>
-          <p>Intelligent voice-controlled assistant with natural language processing, voice recognition, and conversational AI capabilities for hands-free operation.</p>
-          <a href="#" class="project-link">Learn More →</a>
-        </div>
-        <div class="glass-wedge project-card">
+        <div class="project-card">
           <h3>Smart IoT Weather Station</h3>
-          <p class="tags">IoT, Arduino, Cloud Sync, Real-time Data</p>
-          <p>Real-time weather monitoring system with IoT sensors integrated with AWS IoT Core for live cloud data synchronization and predictive analysis dashboard.</p>
-          <a href="#" class="project-link">Learn More →</a>
+          <p class="tags">IoT | Arduino | AWS | Cloud Sync</p>
+          <p>Real-time weather monitoring system with IoT sensors integrated with AWS IoT Core for live cloud synchronization and predictive analysis.</p>
+          <a href="#" class="project-link">View Details →</a>
         </div>
-        <div class="glass-wedge project-card">
+        <div class="project-card">
+          <h3>Expense Tracker</h3>
+          <p class="tags">Flutter | Firebase | Analytics</p>
+          <p>Cross-platform expense management application with real-time synchronization, analytics dashboard, and budget tracking capabilities.</p>
+          <a href="#" class="project-link">View Details →</a>
+        </div>
+        <div class="project-card">
           <h3>AI-Powered Resume Parser</h3>
-          <p class="tags">NLP, Machine Learning, Python, Flask</p>
-          <p>Intelligent resume screening tool using NLP to extract key information, match job descriptions, and rank candidates based on relevance and skill compatibility.</p>
-          <a href="#" class="project-link">Learn More →</a>
+          <p class="tags">NLP | Machine Learning | Python</p>
+          <p>Intelligent resume screening tool using NLP to extract key information and match job descriptions with automated candidate ranking.</p>
+          <a href="#" class="project-link">View Details →</a>
         </div>
-        <div class="glass-wedge project-card">
+        <div class="project-card">
           <h3>Real-Time Collaborative Editor</h3>
-          <p class="tags">WebSockets, Node.js, React, Firebase</p>
-          <p>Multi-user document editor with real-time collaboration using WebSockets, supporting live cursor tracking and synchronized content updates across users.</p>
-          <a href="#" class="project-link">Learn More →</a>
+          <p class="tags">WebSockets | Node.js | React</p>
+          <p>Multi-user document editor with real-time collaboration, cursor tracking, and live content synchronization across users.</p>
+          <a href="#" class="project-link">View Details →</a>
         </div>
       </div>
     </div>
@@ -181,7 +144,7 @@
     <div class="container">
       <h2 class="section-title">Technical Skills</h2>
       <div class="skills-grid">
-        <div class="glass-wedge skill-category">
+        <div class="skill-category">
           <h3>Mobile Development</h3>
           <div class="skill-tags">
             <span class="skill-tag">Android Studio</span>
@@ -190,22 +153,31 @@
             <span class="skill-tag">Kotlin</span>
           </div>
         </div>
-        <div class="glass-wedge skill-category">
+        <div class="skill-category">
+          <h3>Cloud & IoT</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">AWS</span>
+            <span class="skill-tag">IoT Core</span>
+            <span class="skill-tag">Arduino</span>
+            <span class="skill-tag">Cloud Sync</span>
+          </div>
+        </div>
+        <div class="skill-category">
+          <h3>Backend Development</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">Node.js</span>
+            <span class="skill-tag">Firebase</span>
+            <span class="skill-tag">REST APIs</span>
+            <span class="skill-tag">Database Design</span>
+          </div>
+        </div>
+        <div class="skill-category">
           <h3>AI & Cognitive Systems</h3>
           <div class="skill-tags">
             <span class="skill-tag">Machine Learning</span>
             <span class="skill-tag">NLP</span>
-            <span class="skill-tag">Cognitive Computing</span>
+            <span class="skill-tag">Gemini AI</span>
             <span class="skill-tag">Data Analysis</span>
-          </div>
-        </div>
-        <div class="glass-wedge skill-category">
-          <h3>Backend & Databases</h3>
-          <div class="skill-tags">
-            <span class="skill-tag">Node.js</span>
-            <span class="skill-tag">Firebase</span>
-            <span class="skill-tag">SQL</span>
-            <span class="skill-tag">REST APIs</span>
           </div>
         </div>
       </div>
@@ -215,27 +187,24 @@
   <section id="contact" class="contact">
     <div class="container">
       <h2 class="section-title">Get In Touch</h2>
-      <div class="contact-glass-large">
-        <p>Open to opportunities, internships, and collaborations. Feel free to reach out!</p>
+      <div class="contact-content">
+        <p class="contact-message">I'm always interested in hearing about new projects and opportunities. Feel free to reach out!</p>
         <div class="contact-links">
           <a href="mailto:mbarath2121@gmail.com" class="contact-link">
-            <i class="fas fa-envelope"></i>
-            Email
+            <i class="fas fa-envelope"></i> Email
           </a>
-          <a href="https://github.com/BARATH2121" class="contact-link">
-            <i class="fab fa-github"></i>
-            GitHub
+          <a href="https://github.com/BARATH2121" target="_blank" class="contact-link">
+            <i class="fab fa-github"></i> GitHub
           </a>
           <a href="tel:+919789223360" class="contact-link">
-            <i class="fas fa-phone"></i>
-            Call
+            <i class="fas fa-phone"></i> Call
           </a>
         </div>
       </div>
     </div>
   </section>
 
-  <footer>
+  <footer class="footer">
     <p>&copy; 2025 Barath M. Computer Science Student | Coimbatore, India</p>
   </footer>
 
