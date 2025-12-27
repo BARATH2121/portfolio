@@ -1,3 +1,72 @@
+// Initialize 3D Canvas Background
+function init3DCanvas() {
+    const canvas = document.getElementById('bg3d');
+    if (!canvas) return;
+    
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    let particles = [];
+    
+    class Particle {
+        constructor() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.z = Math.random() * 100;
+            this.size = Math.random() * 2;
+            this.vx = (Math.random() - 0.5) * 2;
+            this.vy = (Math.random() - 0.5) * 2;
+            this.vz = (Math.random() - 0.5) * 1;
+        }
+        
+        update() {
+            this.x += this.vx * 0.5;
+            this.y += this.vy * 0.5;
+            this.z += this.vz;
+            
+            if (this.z > 100) this.z = 0;
+            if (this.x < 0) this.x = canvas.width;
+            if (this.x > canvas.width) this.x = 0;
+            if (this.y < 0) this.y = canvas.height;
+            if (this.y > canvas.height) this.y = 0;
+        }
+        
+        draw() {
+            const opacity = (100 - this.z) / 100;
+            const color = this.z < 50 ? `rgba(37, 99, 235, ${opacity * 0.8})` : `rgba(248, 113, 113, ${opacity * 0.6})`;
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
+        }
+    }
+    
+    for (let i = 0; i < 50; i++) {
+        particles.push(new Particle());
+    }
+    
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        for (let particle of particles) {
+            particle.update();
+            particle.draw();
+        }
+        
+        requestAnimationFrame(animate);
+    }
+    
+    animate();
+    
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+}
+
+init3DCanvas();
+
 // Smooth scrolling for navigation links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
