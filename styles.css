@@ -230,4 +230,94 @@ body::before {
   50% {
     transform: translateY(-10px);
   }
+
+/* ============================================ */
+/* PREMIUM GLASSY WEDGE NETWORK AESTHETIC 2025 */
+/* ============================================ */
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #0a0e27 0%, #0d1629 50%, #0a0e27 100%);
+  z-index: -2;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 20% 30%, #0080ff, rgba(0, 128, 255, 0)),
+    radial-gradient(2px 2px at 60% 70%, #9d4edd, rgba(157, 78, 221, 0)),
+    radial-gradient(1px 1px at 50% 50%, #00d9ff, rgba(0, 217, 255, 0));
+  background-size: 200% 200%;
+  animation: particleDrift 20s ease-in-out infinite;
+  z-index: -1;
+  pointer-events: none;
+}
+
+@keyframes particleDrift {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+}
+
+/* Glassmorphism wedge floating elements */
+.section::before {
+  content: '';
+  position: absolute;
+  top: -100px;  
+  right: -100px;
+  width: 250px;
+  height: 250px;
+  background: linear-gradient(135deg, rgba(0, 128, 255, 0.1), rgba(157, 78, 221, 0.1));
+  border: 1px solid rgba(0, 217, 255, 0.3);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 0 30px rgba(0, 128, 255, 0.4), inset 0 1px 20px rgba(255, 255, 255, 0.1);
+  animation: wedgeFloat 8s ease-in-out infinite;
+  z-index: -1;
+}
+
+@keyframes wedgeFloat {
+  0% { transform: translateY(0) rotateZ(0deg); opacity: 0.7; }
+  50% { transform: translateY(-40px) rotateZ(5deg); opacity: 0.8; }
+  100% { transform: translateY(0) rotateZ(0deg); opacity: 0.7; }
+}
+
+.btn {
+  background: linear-gradient(135deg, rgba(0, 128, 255, 0.15), rgba(157, 78, 221, 0.1));
+  border: 1px solid rgba(0, 217, 255, 0.4);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(0, 128, 255, 0.2), inset 0 1px 15px rgba(255, 255, 255, 0.1);
+}
+
+.btn:hover {
+  background: linear-gradient(135deg, rgba(0, 128, 255, 0.25), rgba(157, 78, 221, 0.15));
+  border-color: rgba(0, 217, 255, 0.8);
+  box-shadow: 0 15px 50px rgba(0, 128, 255, 0.4), 0 0 20px rgba(157, 78, 221, 0.3);
+  transform: translateY(-2px);
+}
+
+.section-title {
+  background: linear-gradient(90deg, #00d9ff, #0080ff, #9d4edd, #00d9ff);
+  background-size: 300% auto;
+  animation: neonGlowFlow 4s linear infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 15px rgba(0, 217, 255, 0.4));
+}
+
+@keyframes neonGlowFlow {
+  0% { background-position: 0% center; }
+  100% { background-position: 300% center; }
+}
 }
