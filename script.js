@@ -315,3 +315,22 @@ projectLinks.forEach(link=>{
 
 console.log('⚡ ULTIMATE HEXAGON ENERGY CORE ENGINE DEPLOYED!');
 console.log('💫 Premium 3D Background with Fiber-Optic Streams - Ready for Production');
+
+
+// Enhanced hover z-index management
+const interactiveElements = document.querySelectorAll('.btn, .project-card, .skill-tag, .contact-link');
+interactiveElements.forEach(el => {
+  el.addEventListener('mouseenter', function() { this.style.zIndex = '10'; });
+  el.addEventListener('mouseleave', function() { this.style.zIndex = 'auto'; });
+});
+
+// Performance tracking for page visibility
+document.addEventListener('visibilitychange', () => {
+  if(document.hidden) {
+    console.log('Portfolio minimized');
+  } else {
+    console.log('Portfolio active');
+  }
+});
+
+console.log('✨ Enhanced animations active!');
