@@ -463,3 +463,144 @@ body::after {
     margin-top: 1rem;
     border: 1px solid rgba(0, 217, 255, 0.4);
 }
+
+
+/* ============================================ */
+/* PROFESSIONAL PROFILE IMAGE STYLING */
+/* ============================================ */
+
+.profile-image-container {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-image {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    border: 3px solid rgba(0, 217, 255, 0.6);
+    object-fit: cover;
+    box-shadow: 0 0 30px rgba(0, 217, 255, 0.4), 
+                inset 0 1px 10px rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    animation: profilePulse 3s ease-in-out infinite;
+}
+
+.profile-image:hover {
+    border-color: rgba(0, 217, 255, 0.9);
+    box-shadow: 0 0 50px rgba(0, 217, 255, 0.8), 
+                0 0 100px rgba(0, 217, 255, 0.5),
+                inset 0 1px 10px rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.profile-glow {
+    position: absolute;
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 217, 255, 0.3);
+    background: radial-gradient(circle, rgba(0, 217, 255, 0.1) 0%, transparent 70%);
+    animation: glowRotate 4s linear infinite;
+    z-index: -1;
+}
+
+@keyframes profilePulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 30px rgba(0, 217, 255, 0.4), inset 0 1px 10px rgba(255, 255, 255, 0.1);
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 0 50px rgba(0, 217, 255, 0.6), inset 0 1px 10px rgba(255, 255, 255, 0.15);
+    }
+}
+
+@keyframes glowRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Enhanced hero section with profile */
+.hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Professional typography enhancements */
+.hero-title {
+    font-size: 3.5rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -2px !important;
+    background: linear-gradient(135deg, #ffffff 0%, #c4b5fd 50%, #a78bfa 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    text-shadow: none !important;
+    margin: 1rem 0 !important;
+}
+
+.subtitle {
+    font-size: 1.2rem !important;
+    letter-spacing: 0.5px !important;
+    background: linear-gradient(90deg, #00d9ff, #0080ff, #9d4edd, #00d9ff) !important;
+    background-size: 300% auto !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    background-clip: text !important;
+    animation: textGlow 3s linear infinite !important;
+    font-weight: 600 !important;
+}
+
+@keyframes textGlow {
+    0% { background-position: 0% center; }
+    100% { background-position: 300% center; }
+}
+
+.hero-description {
+    font-size: 1.1rem !important;
+    line-height: 1.8 !important;
+    color: #d1d5db !important;
+    margin-bottom: 2rem !important;
+}
+
+/* Responsive profile image */
+@media (max-width: 768px) {
+    .profile-image-container {
+        width: 150px;
+        height: 150px;
+        margin: 0 auto 1.5rem;
+    }
+    
+    .profile-image {
+        width: 140px;
+        height: 140px;
+    }
+    
+    .profile-glow {
+        width: 170px;
+        height: 170px;
+    }
+    
+    .hero-title {
+        font-size: 2.5rem !important;
+    }
+    
+    .subtitle {
+        font-size: 1rem !important;
+    }
+}
