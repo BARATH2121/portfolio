@@ -324,3 +324,142 @@ body::after {
 
 
                                            /* Canvas animation engine active - Hexagon energy core deployed */
+
+
+
+/* ============================================ */
+/* ENHANCED GLASSMORPHISM EFFECTS 2025 */
+/* ============================================ */
+
+/* Neon glass card effects for projects and sections */
+.project-card, .skill-category, .meta-item, .contact-link, .timeline-content {
+    border: 1.5px solid rgba(0, 217, 255, 0.4) !important;
+    background: rgba(15, 23, 42, 0.7) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    box-shadow: 0 8px 32px rgba(0, 217, 255, 0.15), inset 0 1px 20px rgba(255, 255, 255, 0.1) !important;
+}
+
+.project-card:hover, .skill-category:hover, .contact-link:hover {
+    border-color: rgba(0, 217, 255, 0.8) !important;
+    background: rgba(15, 23, 42, 0.9) !important;
+    box-shadow: 0 15px 50px rgba(0, 217, 255, 0.4), inset 0 1px 20px rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Enhanced navbar glassmorphism */
+.navbar {
+    background: rgba(0, 8, 20, 0.6) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+    border-bottom: 1px solid rgba(0, 217, 255, 0.2) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(0, 217, 255, 0.1) !important;
+}
+
+/* Button glassmorphism */
+.btn {
+    border: 1.5px solid rgba(0, 217, 255, 0.5) !important;
+    background: rgba(0, 217, 255, 0.1) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    box-shadow: 0 8px 32px rgba(0, 217, 255, 0.2), inset 0 1px 15px rgba(255, 255, 255, 0.1) !important;
+}
+
+.btn:hover {
+    background: rgba(0, 217, 255, 0.2) !important;
+    border-color: rgba(0, 217, 255, 0.9) !important;
+    box-shadow: 0 15px 50px rgba(0, 217, 255, 0.4), 0 0 20px rgba(0, 217, 255, 0.3), inset 0 1px 15px rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Section glassmorphism */
+.section {
+    background: rgba(0, 8, 20, 0.4) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+}
+
+/* GitHub projects section styles */
+.github-projects-section {
+    padding: 8rem 2rem;
+    position: relative;
+    z-index: 2;
+    background: rgba(0, 8, 20, 0.4);
+}
+
+.github-projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.github-project-card {
+    padding: 2rem;
+    border: 1.5px solid rgba(0, 217, 255, 0.5);
+    background: rgba(15, 23, 42, 0.8);
+    border-radius: 16px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 217, 255, 0.15), inset 0 1px 20px rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.github-project-card:hover {
+    border-color: rgba(0, 217, 255, 0.9);
+    background: rgba(15, 23, 42, 0.95);
+    box-shadow: 0 15px 50px rgba(0, 217, 255, 0.4), inset 0 1px 20px rgba(255, 255, 255, 0.15);
+    transform: translateY(-5px);
+}
+
+.github-project-card h3 {
+    color: #f5f3ff;
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #00d9ff, #0080ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.github-project-card .repo-link {
+    color: #00d9ff;
+    text-decoration: none;
+    font-weight: 600;
+    margin-top: auto;
+    padding-top: 1rem;
+    display: inline-block;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.github-project-card .repo-link:hover {
+    color: #00ffff;
+    border-bottom-color: #00d9ff;
+}
+
+.repo-stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    color: #a0aec0;
+}
+
+.repo-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.repo-language {
+    display: inline-block;
+    background: rgba(0, 217, 255, 0.2);
+    color: #00d9ff;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 1rem;
+    border: 1px solid rgba(0, 217, 255, 0.4);
+}
