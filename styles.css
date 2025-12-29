@@ -604,3 +604,91 @@ body::after {
         font-size: 1rem !important;
     }
 }
+
+
+/* ============================================ */
+/* ENHANCED INTERACTIVE ANIMATIONS 2025 */
+/* ============================================ */
+
+/* Smoother project card transitions */
+.project-card:hover {
+  transform: scale(1.06) translateY(-15px) !important;
+  box-shadow: 0 20px 60px rgba(0, 217, 255, 0.5), inset 0 1px 20px rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Enhanced button glow */
+.btn-primary:hover {
+  box-shadow: 0 15px 40px rgba(0, 217, 255, 0.6), 0 0 30px rgba(0, 217, 255, 0.4) !important;
+  transform: translateY(-4px) scale(1.05) !important;
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 8, 20, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 217, 255, 0.4);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 217, 255, 0.8);
+  box-shadow: 0 0 10px rgba(0, 217, 255, 0.5);
+}
+
+/* Nav link underline on hover */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #00d9ff, #0080ff);
+  transition: width 0.3s ease !important;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Enhanced skill tag hover */
+.skill-tag:hover {
+  transform: translateY(-8px) scale(1.12) !important;
+  box-shadow: 0 15px 30px rgba(0, 217, 255, 0.4) !important;
+}
+
+/* Profile image enhanced glow */
+.profile-image:hover {
+  box-shadow: 0 0 60px rgba(0, 217, 255, 0.8), 0 0 100px rgba(0, 217, 255, 0.5), inset 0 1px 10px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* GitHub card hover effect */
+.github-project-card:hover {
+  transform: scale(1.05) translateY(-12px) !important;
+  box-shadow: 0 20px 50px rgba(0, 217, 255, 0.5), inset 0 1px 20px rgba(255, 255, 255, 0.15) !important;
+}
+
+/* CTA button enhanced */
+.cta-btn:hover {
+  transform: translateY(-3px) scale(1.05) !important;
+  box-shadow: 0 15px 35px rgba(0, 217, 255, 0.4) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .project-card:hover {
+    transform: scale(1.03) translateY(-8px) !important;
+  }
+  .skill-tag:hover {
+    transform: translateY(-5px) scale(1.08) !important;
+  }
+  .github-project-card:hover {
+    transform: scale(1.03) translateY(-8px) !important;
+  }
+}
