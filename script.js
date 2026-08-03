@@ -17,7 +17,7 @@ function initLoader(){
     document.body.style.overflow='';
     setTimeout(()=>{ if(loader.parentNode)loader.parentNode.removeChild(loader); },900);
   };
-  window.setTimeout(finish,2000);
+  window.setTimeout(finish,5000);
 }
 
 // ---------------------------------------------
@@ -26,7 +26,15 @@ function initLoader(){
 //    twinkling dots, racing comets, comet/dot
 //    ripple collisions, cursor repel, and drag-spin.
 // ---------------------------------------------
-function initGoldenTornado(){
+// ---------------------------------------------
+// 1) GOLDEN BLACK HOLE (interactive background)
+//    A tilted, rotating accretion disk of gold
+//    particles swirling around a dark core, with
+//    trailing streaks. Drag to rotate/tilt the
+//    view, hover to nudge particles, click for a
+//    ripple burst.
+// ---------------------------------------------
+function initGoldenBlackHole(){
   const canvas=document.getElementById('bg3d');
   if(!canvas)return;
   const ctx=canvas.getContext('2d');
@@ -35,245 +43,180 @@ function initGoldenTornado(){
 
   const reducedMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---- Props (mirrors the Originkit Tornado controls) ----
-  const BACKGROUND='#000000';
+  // ---- Props (mirrors the Originkit Black Hole controls) ----
   const GOLD_HUE=48;                 // matches #FFCC00
-  const LINE_COUNT=100;              // even, silky spacing (matches "123 lines" feel)
-  const TOP_RADIUS=0.27;             // crown flare — from reference: top 190px
-  const WAIST_RADIUS=0.075;          // pinch width — from reference: waist 53px
-  const WAIST_POSITION=0.5;          // waist position 50%
-  const BOTTOM_RADIUS=1.05;          // base spread — from reference: bottom 835px (wraps into a disc)
-  const TWIST=2;                     // spiral turns — matches reference: twist 2
-  const ZOOM=1.1;
-  const SPEED=0.00085;               // auto rotation speed
-  const DIRECTION_UP=false;          // matches reference: Direction = Down
-  const SHOW_DOTS=false;             // matches reference: Dots = Hide
-  const SHOW_COMETS=false;           // matches reference: Comets = Hide
-  const REPEL=true;
+  const PARTICLE_COUNT=900;
+  const ORBIT_RADIUS_PCT=0.62;       // outer orbit radius, fraction of min(w,h)
+  const INNER_RADIUS_PCT=0.09;       // event-horizon cutoff, fraction of outer
+  const PARTICLE_SIZE=1.6;
+  const BASE_SPEED=0.0016;
+  const TRAIL_LENGTH=5;
+  const TILT_ANGLE=0.34;             // ~20deg, disc inclination (X axis)
+  const SIDEWAY_TILT=2.35;           // ~136deg, in-plane orientation (Z axis)
+  const GRAVITY_INFLOW=0;            // 0 = stable rings (matches reference default)
   const DRAG_SENSITIVITY=0.006;
-  const FRICTION=0.93;
+  const FRICTION=0.92;
+  const REPEL_RADIUS=90;
+  const REPEL_STRENGTH=22;
 
   let time=0;
-  let baseRotation=0.6;
-  let dragVel=0, dragging=false, lastPX=0;
+  let sidewayTilt=SIDEWAY_TILT, tiltAngle=TILT_ANGLE;
+  let velSide=0, velTilt=0;
+  let dragging=false, lastPX=0, lastPY=0;
   let mouseX=-9999, mouseY=-9999, mouseActive=false;
-  let fieldOffX=0, fieldOffY=0; // whole-form repel offset
-
-  const ripples=[]; // {x,y,t}
+  const ripples=[];
 
   canvas.style.cursor='grab';
   canvas.style.touchAction='none';
 
   canvas.addEventListener('pointerdown',(e)=>{
-    dragging=true; lastPX=e.clientX; dragVel=0;
+    dragging=true; lastPX=e.clientX; lastPY=e.clientY; velSide=0; velTilt=0;
     canvas.style.cursor='grabbing';
     try{ canvas.setPointerCapture(e.pointerId); }catch(err){}
   });
   window.addEventListener('pointermove',(e)=>{
     mouseX=e.clientX; mouseY=e.clientY; mouseActive=true;
     if(!dragging)return;
-    const dx=e.clientX-lastPX;
-    baseRotation+=dx*DRAG_SENSITIVITY;
-    dragVel=dx*DRAG_SENSITIVITY;
-    lastPX=e.clientX;
+    const dx=e.clientX-lastPX, dy=e.clientY-lastPY;
+    sidewayTilt+=dx*DRAG_SENSITIVITY;
+    tiltAngle+=dy*DRAG_SENSITIVITY*0.6;
+    tiltAngle=Math.max(-1.3,Math.min(1.3,tiltAngle));
+    velSide=dx*DRAG_SENSITIVITY;
+    velTilt=dy*DRAG_SENSITIVITY*0.6;
+    lastPX=e.clientX; lastPY=e.clientY;
   });
   window.addEventListener('pointerup',()=>{ dragging=false; canvas.style.cursor='grab'; });
   canvas.addEventListener('pointerleave',()=>{ mouseActive=false; });
-  canvas.addEventListener('click',(e)=>{
-    ripples.push({x:e.clientX,y:e.clientY,t:0});
-  });
+  canvas.addEventListener('click',(e)=>{ ripples.push({x:e.clientX,y:e.clientY,t:0}); });
 
-  function easeInOut(k){ return k<0.5 ? 2*k*k : 1-Math.pow(-2*k+2,2)/2; }
-  function W(){ return canvas.width; }
-  function topY(){ return canvas.height*0.06; }
-  function bottomY(){ return canvas.height*0.94; }
-  function centerX(){ return canvas.width/2+fieldOffX; }
+  function centerX(){ return canvas.width/2; }
+  function centerY(){ return canvas.height*0.46; }
+  function outerR(){ return Math.min(canvas.width,canvas.height)*ORBIT_RADIUS_PCT; }
+  function innerR(){ return outerR()*INNER_RADIUS_PCT; }
 
-  function radiusAt(t){
-    const crown=TOP_RADIUS*W()*ZOOM;
-    const pinch=WAIST_RADIUS*W()*ZOOM;
-    const base=BOTTOM_RADIUS*W()*ZOOM;
-    if(t<WAIST_POSITION){
-      return crown+(pinch-crown)*easeInOut(t/WAIST_POSITION);
-    }
-    return pinch+(base-pinch)*easeInOut((t-WAIST_POSITION)/(1-WAIST_POSITION));
-  }
-
-  function goldColor(t,alpha,bright){
-    // consistent bright #FFCC00-style gold, not fading to amber
-    const light=48+(bright||0)*22;
-    return `hsla(${GOLD_HUE},100%,${light}%,${alpha})`;
-  }
-
-  function pointOn(strandIndex,t,rot){
-    const angle=(strandIndex/LINE_COUNT)*Math.PI*2+t*TWIST*Math.PI*2+rot;
-    const r=radiusAt(t);
-    const y=topY()+t*(bottomY()-topY())+fieldOffY;
-    const x=centerX()+Math.cos(angle)*r;
-    return {x,y,r,angle};
-  }
-
-  function drawStrands(rot){
-    const steps=64;
-    for(let s=0;s<LINE_COUNT;s++){
-      ctx.beginPath();
-      for(let i=0;i<=steps;i++){
-        const t=i/steps;
-        let p=pointOn(s,t,rot);
-        let x=p.x,y=p.y;
-        if(REPEL&&mouseActive){
-          const dx=x-mouseX,dy=y-mouseY;
-          const dist=Math.hypot(dx,dy);
-          const rad=110;
-          if(dist<rad&&dist>0.001){
-            const f=(1-dist/rad)*36;
-            x+=(dx/dist)*f; y+=(dy/dist)*f;
-          }
-        }
-        if(i===0)ctx.moveTo(x,y);
-        else ctx.lineTo(x,y);
-      }
-      const grad=ctx.createLinearGradient(0,topY(),0,bottomY());
-      grad.addColorStop(0,goldColor(0,0.75,1));
-      grad.addColorStop(0.5,goldColor(0.5,0.6,0.85));
-      grad.addColorStop(1,goldColor(1,0.5,0.75));
-      ctx.strokeStyle=grad;
-      ctx.lineWidth=1.1;
-      ctx.stroke();
-    }
-  }
-
-  class Dust{
-    constructor(){ this.reset(); }
-    reset(){
-      this.strand=Math.floor(Math.random()*LINE_COUNT);
-      this.t=Math.random();
-      this.speed=0.00022+Math.random()*0.00035;
-      this.jitter=(Math.random()-0.5)*22;
-      this.size=0.8+Math.random()*1.8;
-      this.phase=Math.random()*Math.PI*2;
-      this.twinkleSpeed=0.05+Math.random()*0.06;
-      this.bump=0;
-    }
-    update(rot){
-      const dir=DIRECTION_UP?-1:1;
-      this.t+=dir*this.speed*16;
-      if(this.t>1||this.t<0)this.reset();
-      const p=pointOn(this.strand,this.t,rot);
-      this.x=p.x+Math.cos(p.angle+Math.PI/2)*this.jitter;
-      this.y=p.y-(this.bump*8);
-      if(this.bump>0)this.bump=Math.max(0,this.bump-0.04);
-    }
-    draw(){
-      const twinkle=Math.sin(time*this.twinkleSpeed+this.phase)*0.4+0.6+this.bump*0.6;
-      ctx.globalAlpha=Math.max(0.12,Math.min(1,twinkle));
-      ctx.fillStyle=`hsla(${GOLD_HUE},90%,${70+this.bump*20}%,1)`;
-      ctx.beginPath();
-      ctx.arc(this.x,this.y,this.size+this.bump*1.5,0,Math.PI*2);
-      ctx.fill();
-      ctx.globalAlpha=1;
-    }
-  }
-  const dust=[];
-  if(SHOW_DOTS){ for(let i=0;i<90;i++)dust.push(new Dust()); }
-
-  class Comet{
-    constructor(){ this.reset(); }
-    reset(){
-      this.strand=Math.floor(Math.random()*LINE_COUNT);
-      this.t=DIRECTION_UP?1:0;
-      this.speed=0.0009+Math.random()*0.0006;
+  class Particle{
+    constructor(){ this.reset(true); }
+    reset(initial){
+      this.r=innerR()+Math.random()*(outerR()-innerR());
+      if(!initial)this.r=outerR();
+      this.theta=Math.random()*Math.PI*2;
+      this.size=PARTICLE_SIZE*(0.4+Math.random()*1.3);
       this.trail=[];
     }
-    update(rot){
-      const dir=DIRECTION_UP?-1:1;
-      this.t+=dir*this.speed*16;
-      if(this.t>1||this.t<0){ this.reset(); return; }
-      const p=pointOn(this.strand,this.t,rot);
-      this.x=p.x; this.y=p.y;
-      this.trail.push({x:p.x,y:p.y});
-      if(this.trail.length>16)this.trail.shift();
-
-      // collision-with-dust ripple
-      for(const d of dust){
-        const dx=d.x-this.x, dy=d.y-this.y;
-        if(dx*dx+dy*dy<170){
-          d.bump=1;
-          ripples.push({x:this.x,y:this.y,t:0});
-          break;
+    angularSpeed(){
+      const rr=Math.max(this.r,innerR()*1.2);
+      return BASE_SPEED*(outerR()/rr);
+    }
+    project(){
+      const X0=this.r*Math.cos(this.theta);
+      const Z0=this.r*Math.sin(this.theta);
+      const Y0=0;
+      // tilt around X axis (inclination)
+      const Y1=Y0*Math.cos(tiltAngle)-Z0*Math.sin(tiltAngle);
+      const Z1=Y0*Math.sin(tiltAngle)+Z0*Math.cos(tiltAngle);
+      const X1=X0;
+      // rotate around Z axis (in-plane orientation)
+      const Xr=X1*Math.cos(sidewayTilt)-Y1*Math.sin(sidewayTilt);
+      const Yr=X1*Math.sin(sidewayTilt)+Y1*Math.cos(sidewayTilt);
+      return {sx:centerX()+Xr, sy:centerY()+Yr, depth:Z1};
+    }
+    update(){
+      this.theta+=this.angularSpeed()*16;
+      if(GRAVITY_INFLOW>0){
+        this.r-=GRAVITY_INFLOW*0.02;
+        if(this.r<innerR()){ this.reset(false); }
+      }
+      const p=this.project();
+      let sx=p.sx, sy=p.sy;
+      if(mouseActive){
+        const dx=sx-mouseX, dy=sy-mouseY;
+        const dist=Math.hypot(dx,dy);
+        if(dist<REPEL_RADIUS&&dist>0.001){
+          const f=(1-dist/REPEL_RADIUS)*REPEL_STRENGTH;
+          sx+=(dx/dist)*f; sy+=(dy/dist)*f;
         }
       }
+      this.sx=sx; this.sy=sy; this.depth=p.depth;
+      this.trail.push({x:sx,y:sy});
+      if(this.trail.length>TRAIL_LENGTH)this.trail.shift();
     }
     draw(){
+      const depthNorm=(this.depth/outerR()+1)/2; // 0 back .. 1 front
+      const baseAlpha=0.25+depthNorm*0.65;
+      const hue=GOLD_HUE;
       for(let i=0;i<this.trail.length;i++){
-        const p=this.trail[i];
-        const k=i/this.trail.length;
-        ctx.globalAlpha=k*0.9;
-        ctx.fillStyle=`hsla(${GOLD_HUE},95%,${75+k*15}%,1)`;
+        const t=this.trail[i];
+        const k=(i+1)/this.trail.length;
+        ctx.globalAlpha=baseAlpha*k*0.7;
+        ctx.fillStyle=`hsla(${hue},100%,${50+depthNorm*25}%,1)`;
         ctx.beginPath();
-        ctx.arc(p.x,p.y,0.7+k*2.6,0,Math.PI*2);
+        ctx.arc(t.x,t.y,this.size*(0.5+k*0.6),0,Math.PI*2);
         ctx.fill();
       }
       ctx.globalAlpha=1;
     }
   }
-  const comets=[];
-  if(SHOW_COMETS){
-    for(let i=0;i<5;i++){ const c=new Comet(); c.t=Math.random(); comets.push(c); }
+
+  const particles=[];
+  for(let i=0;i<PARTICLE_COUNT;i++)particles.push(new Particle());
+
+  function drawCore(){
+    const cx=centerX(), cy=centerY();
+    const r=innerR();
+    // soft gold accretion glow behind the core
+    const glow=ctx.createRadialGradient(cx,cy,r*0.3,cx,cy,r*2.2);
+    glow.addColorStop(0,`hsla(${GOLD_HUE},100%,60%,0.35)`);
+    glow.addColorStop(0.5,`hsla(${GOLD_HUE},100%,55%,0.12)`);
+    glow.addColorStop(1,'hsla(48,100%,55%,0)');
+    ctx.fillStyle=glow;
+    ctx.beginPath();
+    ctx.arc(cx,cy,r*2.2,0,Math.PI*2);
+    ctx.fill();
+
+    // event horizon ring
+    ctx.strokeStyle=`hsla(${GOLD_HUE},100%,70%,0.6)`;
+    ctx.lineWidth=1.5;
+    ctx.beginPath();
+    ctx.ellipse(cx,cy,r*1.15,r*1.15*0.55,sidewayTilt,0,Math.PI*2);
+    ctx.stroke();
+
+    // pure black core void
+    ctx.fillStyle='#000000';
+    ctx.beginPath();
+    ctx.ellipse(cx,cy,r,r*0.55,sidewayTilt,0,Math.PI*2);
+    ctx.fill();
   }
 
   function drawRipples(){
     for(let i=ripples.length-1;i>=0;i--){
-      const r=ripples[i];
-      r.t+=0.035;
-      if(r.t>1){ ripples.splice(i,1); continue; }
-      const rad=r.t*70;
-      ctx.globalAlpha=(1-r.t)*0.5;
-      ctx.strokeStyle=`hsla(${GOLD_HUE},95%,70%,1)`;
+      const rp=ripples[i];
+      rp.t+=0.03;
+      if(rp.t>1){ ripples.splice(i,1); continue; }
+      ctx.globalAlpha=(1-rp.t)*0.5;
+      ctx.strokeStyle=`hsla(${GOLD_HUE},100%,70%,1)`;
       ctx.lineWidth=1.4;
       ctx.beginPath();
-      ctx.arc(r.x,r.y,rad,0,Math.PI*2);
+      ctx.arc(rp.x,rp.y,rp.t*80,0,Math.PI*2);
       ctx.stroke();
     }
     ctx.globalAlpha=1;
-    if(ripples.length>40)ripples.splice(0,ripples.length-40);
-  }
-
-  function drawCoreGlow(){
-    const cx=centerX(), cy=topY();
-    const pulse=Math.sin(time*0.02)*0.15+0.85;
-    const rad=radiusAt(0)*1.1*pulse;
-    const g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
-    g.addColorStop(0,`hsla(${GOLD_HUE},100%,70%,${0.4*pulse})`);
-    g.addColorStop(1,`hsla(${GOLD_HUE},100%,55%,0)`);
-    ctx.fillStyle=g;
-    ctx.beginPath();
-    ctx.arc(cx,cy,rad,0,Math.PI*2);
-    ctx.fill();
+    if(ripples.length>30)ripples.splice(0,ripples.length-30);
   }
 
   function frame(){
-    ctx.fillStyle=BACKGROUND;
+    ctx.fillStyle='#000000';
     ctx.fillRect(0,0,canvas.width,canvas.height);
 
     if(!dragging){
-      baseRotation+=SPEED+dragVel;
-      dragVel*=FRICTION;
+      sidewayTilt+=0.0016+velSide;
+      velSide*=FRICTION; velTilt*=FRICTION;
+      tiltAngle+=velTilt;
     }
 
-    if(REPEL&&mouseActive){
-      const targetOffX=(canvas.width/2-mouseX)*0.03;
-      const targetOffY=(canvas.height*0.4-mouseY)*0.015;
-      fieldOffX+=(targetOffX-fieldOffX)*0.05;
-      fieldOffY+=(targetOffY-fieldOffY)*0.05;
-    }else{
-      fieldOffX*=0.95; fieldOffY*=0.95;
-    }
-
-    drawCoreGlow();
-    drawStrands(baseRotation);
-    for(const d of dust){ d.update(baseRotation); d.draw(); }
-    for(const c of comets){ c.update(baseRotation); c.draw(); }
+    particles.sort((a,b)=>(a.depth||0)-(b.depth||0));
+    for(const p of particles)p.update();
+    drawCore();
+    for(const p of particles)p.draw();
     drawRipples();
 
     time++;
@@ -281,10 +224,11 @@ function initGoldenTornado(){
   }
 
   if(reducedMotion){
-    ctx.fillStyle=BACKGROUND;
+    ctx.fillStyle='#000000';
     ctx.fillRect(0,0,canvas.width,canvas.height);
-    drawCoreGlow();
-    drawStrands(baseRotation);
+    for(const p of particles)p.update();
+    drawCore();
+    for(const p of particles)p.draw();
   }else{
     frame();
   }
@@ -295,9 +239,6 @@ function initGoldenTornado(){
   });
 }
 
-// ---------------------------------------------
-// 2) FLOATING GLASS ORBS (gold/amber)
-// ---------------------------------------------
 function initFloatingOrbs(){
   const container=document.createElement('div');
   container.className='floating-orbs';
@@ -399,7 +340,7 @@ function initHeroTilt(){
 // INIT EVERYTHING
 // ---------------------------------------------
 initLoader();
-initGoldenTornado();
+initGoldenBlackHole();
 initFloatingOrbs();
 initCursorSpotlight();
 initTiltCards();
