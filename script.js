@@ -1,233 +1,410 @@
 // ============================================
-// ULTIMATE 3D HEXAGON ENERGY NETWORK ENGINE
-// Premium Glassmorphism + Fiber-Optic Core
+// INTERACTIVE 3D ENGINE — BLACK & GOLD EDITION
+// Draggable/repel Tornado + floating glass orbs
+// + cursor spotlight + whole-page tilt/parallax
+// + 5s "BARATH" glowing loader
 // ============================================
 
-function initHexagonEnergyBackground(){
+// ---------------------------------------------
+// 0) LOADER — glowing "BARATH" intro, shown 5s
+// ---------------------------------------------
+function initLoader(){
+  const loader=document.getElementById('loader');
+  if(!loader)return;
+  document.body.style.overflow='hidden';
+  const finish=()=>{
+    loader.classList.add('hide');
+    document.body.style.overflow='';
+    setTimeout(()=>{ if(loader.parentNode)loader.parentNode.removeChild(loader); },900);
+  };
+  window.setTimeout(finish,2000);
+}
+
+// ---------------------------------------------
+// 1) GOLDEN TORNADO (interactive background)
+//    Sculpted hourglass of glowing strands, with
+//    twinkling dots, racing comets, comet/dot
+//    ripple collisions, cursor repel, and drag-spin.
+// ---------------------------------------------
+function initGoldenTornado(){
   const canvas=document.getElementById('bg3d');
   if(!canvas)return;
   const ctx=canvas.getContext('2d');
   canvas.width=window.innerWidth;
   canvas.height=window.innerHeight;
-  
+
+  const reducedMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- Props (mirrors the Originkit Tornado controls) ----
+  const BACKGROUND='#000000';
+  const GOLD_HUE=48;                 // matches #FFCC00
+  const LINE_COUNT=100;              // even, silky spacing (matches "123 lines" feel)
+  const TOP_RADIUS=0.27;             // crown flare — from reference: top 190px
+  const WAIST_RADIUS=0.075;          // pinch width — from reference: waist 53px
+  const WAIST_POSITION=0.5;          // waist position 50%
+  const BOTTOM_RADIUS=1.05;          // base spread — from reference: bottom 835px (wraps into a disc)
+  const TWIST=2;                     // spiral turns — matches reference: twist 2
+  const ZOOM=1.1;
+  const SPEED=0.00085;               // auto rotation speed
+  const DIRECTION_UP=false;          // matches reference: Direction = Down
+  const SHOW_DOTS=false;             // matches reference: Dots = Hide
+  const SHOW_COMETS=false;           // matches reference: Comets = Hide
+  const REPEL=true;
+  const DRAG_SENSITIVITY=0.006;
+  const FRICTION=0.93;
+
   let time=0;
-  const particles=[];
-  const rayStreams=[];
-  
-  // HEXAGON CORE - Central energy vortex
-  class HexagonCore{
-    constructor(x,y){
-      this.x=x;
-      this.y=y;
-      this.size=80;
-      this.rotation=0;
-      this.rotationSpeed=0.003;
-      this.glow=0;
-      this.pulseStrength=0;
+  let baseRotation=0.6;
+  let dragVel=0, dragging=false, lastPX=0;
+  let mouseX=-9999, mouseY=-9999, mouseActive=false;
+  let fieldOffX=0, fieldOffY=0; // whole-form repel offset
+
+  const ripples=[]; // {x,y,t}
+
+  canvas.style.cursor='grab';
+  canvas.style.touchAction='none';
+
+  canvas.addEventListener('pointerdown',(e)=>{
+    dragging=true; lastPX=e.clientX; dragVel=0;
+    canvas.style.cursor='grabbing';
+    try{ canvas.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  window.addEventListener('pointermove',(e)=>{
+    mouseX=e.clientX; mouseY=e.clientY; mouseActive=true;
+    if(!dragging)return;
+    const dx=e.clientX-lastPX;
+    baseRotation+=dx*DRAG_SENSITIVITY;
+    dragVel=dx*DRAG_SENSITIVITY;
+    lastPX=e.clientX;
+  });
+  window.addEventListener('pointerup',()=>{ dragging=false; canvas.style.cursor='grab'; });
+  canvas.addEventListener('pointerleave',()=>{ mouseActive=false; });
+  canvas.addEventListener('click',(e)=>{
+    ripples.push({x:e.clientX,y:e.clientY,t:0});
+  });
+
+  function easeInOut(k){ return k<0.5 ? 2*k*k : 1-Math.pow(-2*k+2,2)/2; }
+  function W(){ return canvas.width; }
+  function topY(){ return canvas.height*0.06; }
+  function bottomY(){ return canvas.height*0.94; }
+  function centerX(){ return canvas.width/2+fieldOffX; }
+
+  function radiusAt(t){
+    const crown=TOP_RADIUS*W()*ZOOM;
+    const pinch=WAIST_RADIUS*W()*ZOOM;
+    const base=BOTTOM_RADIUS*W()*ZOOM;
+    if(t<WAIST_POSITION){
+      return crown+(pinch-crown)*easeInOut(t/WAIST_POSITION);
     }
-    update(){
-      this.rotation+=this.rotationSpeed;
-      this.glow=Math.sin(time*0.03)*0.4+0.6;
-      this.pulseStrength=Math.sin(time*0.02)*0.3+0.7;
-    }
-    draw(){
-      ctx.save();
-      ctx.translate(this.x,this.y);
-      ctx.rotate(this.rotation);
-      
-      // Inner glow
-      const innerGlow=ctx.createRadialGradient(0,0,0,0,0,this.size*1.2);
-      innerGlow.addColorStop(0,`hsla(180,100%,60%,${this.glow*0.8})`);
-      innerGlow.addColorStop(0.5,`hsla(200,100%,40%,${this.glow*0.4})`);
-      innerGlow.addColorStop(1,`hsla(220,100%,20%,0)`);
-      ctx.fillStyle=innerGlow;
+    return pinch+(base-pinch)*easeInOut((t-WAIST_POSITION)/(1-WAIST_POSITION));
+  }
+
+  function goldColor(t,alpha,bright){
+    // consistent bright #FFCC00-style gold, not fading to amber
+    const light=48+(bright||0)*22;
+    return `hsla(${GOLD_HUE},100%,${light}%,${alpha})`;
+  }
+
+  function pointOn(strandIndex,t,rot){
+    const angle=(strandIndex/LINE_COUNT)*Math.PI*2+t*TWIST*Math.PI*2+rot;
+    const r=radiusAt(t);
+    const y=topY()+t*(bottomY()-topY())+fieldOffY;
+    const x=centerX()+Math.cos(angle)*r;
+    return {x,y,r,angle};
+  }
+
+  function drawStrands(rot){
+    const steps=64;
+    for(let s=0;s<LINE_COUNT;s++){
       ctx.beginPath();
-      ctx.arc(0,0,this.size*1.5,0,Math.PI*2);
-      ctx.fill();
-      
-      // Hexagon shape
-      ctx.strokeStyle=`hsla(180,100%,${50+Math.sin(time*0.04)*20}%,${this.glow})`;
-      ctx.lineWidth=3+this.pulseStrength*2;
-      ctx.beginPath();
-      for(let i=0;i<6;i++){
-        const angle=(i*Math.PI/3)-Math.PI/2;
-        const px=Math.cos(angle)*this.size;
-        const py=Math.sin(angle)*this.size;
-        if(i===0)ctx.moveTo(px,py);
-        else ctx.lineTo(px,py);
+      for(let i=0;i<=steps;i++){
+        const t=i/steps;
+        let p=pointOn(s,t,rot);
+        let x=p.x,y=p.y;
+        if(REPEL&&mouseActive){
+          const dx=x-mouseX,dy=y-mouseY;
+          const dist=Math.hypot(dx,dy);
+          const rad=110;
+          if(dist<rad&&dist>0.001){
+            const f=(1-dist/rad)*36;
+            x+=(dx/dist)*f; y+=(dy/dist)*f;
+          }
+        }
+        if(i===0)ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
       }
-      ctx.closePath();
+      const grad=ctx.createLinearGradient(0,topY(),0,bottomY());
+      grad.addColorStop(0,goldColor(0,0.75,1));
+      grad.addColorStop(0.5,goldColor(0.5,0.6,0.85));
+      grad.addColorStop(1,goldColor(1,0.5,0.75));
+      ctx.strokeStyle=grad;
+      ctx.lineWidth=1.1;
       ctx.stroke();
-      
-      // Hexagon fill with gradient
-      const hexGradient=ctx.createRadialGradient(0,0,0,0,0,this.size);
-      hexGradient.addColorStop(0,`hsla(180,100%,40%,${0.3*this.pulseStrength})`);
-      hexGradient.addColorStop(1,`hsla(200,100%,20%,${0.1*this.pulseStrength})`);
-      ctx.fillStyle=hexGradient;
-      ctx.fill();
-      
-      // Center spark
-      ctx.globalAlpha=this.glow;
-      ctx.fillStyle=`hsla(180,100%,80%,1)`;
-      ctx.beginPath();
-      ctx.arc(0,0,8+Math.sin(time*0.05)*4,0,Math.PI*2);
-      ctx.fill();
-      
-      ctx.globalAlpha=1;
-      ctx.restore();
     }
   }
-  
-  // RAY STREAM - Energy beams from hexagon
-  class RayStream{
-    constructor(angle){
-      this.angle=angle;
-      this.length=0;
-      this.maxLength=400;
-      this.speed=4;
-      this.particles=[];
-      for(let i=0;i<15;i++){
-        this.particles.push({offset:i*20,opacity:0});
-      }
+
+  class Dust{
+    constructor(){ this.reset(); }
+    reset(){
+      this.strand=Math.floor(Math.random()*LINE_COUNT);
+      this.t=Math.random();
+      this.speed=0.00022+Math.random()*0.00035;
+      this.jitter=(Math.random()-0.5)*22;
+      this.size=0.8+Math.random()*1.8;
+      this.phase=Math.random()*Math.PI*2;
+      this.twinkleSpeed=0.05+Math.random()*0.06;
+      this.bump=0;
     }
-    update(){
-      this.length=Math.min(this.length+this.speed,this.maxLength);
-      for(let p of this.particles){
-        p.offset=Math.max(p.offset-3,0);
-        p.opacity=1-(p.offset/this.maxLength);
-      }
+    update(rot){
+      const dir=DIRECTION_UP?-1:1;
+      this.t+=dir*this.speed*16;
+      if(this.t>1||this.t<0)this.reset();
+      const p=pointOn(this.strand,this.t,rot);
+      this.x=p.x+Math.cos(p.angle+Math.PI/2)*this.jitter;
+      this.y=p.y-(this.bump*8);
+      if(this.bump>0)this.bump=Math.max(0,this.bump-0.04);
     }
-    draw(coreX,coreY){
-      const endX=coreX+Math.cos(this.angle)*this.length;
-      const endY=coreY+Math.sin(this.angle)*this.length;
-      
-      // Ray line
-      ctx.strokeStyle=`hsla(180,100%,50%,0.3)`;
-      ctx.lineWidth=2;
+    draw(){
+      const twinkle=Math.sin(time*this.twinkleSpeed+this.phase)*0.4+0.6+this.bump*0.6;
+      ctx.globalAlpha=Math.max(0.12,Math.min(1,twinkle));
+      ctx.fillStyle=`hsla(${GOLD_HUE},90%,${70+this.bump*20}%,1)`;
       ctx.beginPath();
-      ctx.moveTo(coreX,coreY);
-      ctx.lineTo(endX,endY);
-      ctx.stroke();
-      
-      // Particle stream
-      for(let p of this.particles){
-        const px=coreX+Math.cos(this.angle)*(this.length-p.offset);
-        const py=coreY+Math.sin(this.angle)*(this.length-p.offset);
-        ctx.fillStyle=`hsla(180,100%,60%,${p.opacity})`;
+      ctx.arc(this.x,this.y,this.size+this.bump*1.5,0,Math.PI*2);
+      ctx.fill();
+      ctx.globalAlpha=1;
+    }
+  }
+  const dust=[];
+  if(SHOW_DOTS){ for(let i=0;i<90;i++)dust.push(new Dust()); }
+
+  class Comet{
+    constructor(){ this.reset(); }
+    reset(){
+      this.strand=Math.floor(Math.random()*LINE_COUNT);
+      this.t=DIRECTION_UP?1:0;
+      this.speed=0.0009+Math.random()*0.0006;
+      this.trail=[];
+    }
+    update(rot){
+      const dir=DIRECTION_UP?-1:1;
+      this.t+=dir*this.speed*16;
+      if(this.t>1||this.t<0){ this.reset(); return; }
+      const p=pointOn(this.strand,this.t,rot);
+      this.x=p.x; this.y=p.y;
+      this.trail.push({x:p.x,y:p.y});
+      if(this.trail.length>16)this.trail.shift();
+
+      // collision-with-dust ripple
+      for(const d of dust){
+        const dx=d.x-this.x, dy=d.y-this.y;
+        if(dx*dx+dy*dy<170){
+          d.bump=1;
+          ripples.push({x:this.x,y:this.y,t:0});
+          break;
+        }
+      }
+    }
+    draw(){
+      for(let i=0;i<this.trail.length;i++){
+        const p=this.trail[i];
+        const k=i/this.trail.length;
+        ctx.globalAlpha=k*0.9;
+        ctx.fillStyle=`hsla(${GOLD_HUE},95%,${75+k*15}%,1)`;
         ctx.beginPath();
-        ctx.arc(px,py,2+p.opacity*3,0,Math.PI*2);
+        ctx.arc(p.x,p.y,0.7+k*2.6,0,Math.PI*2);
         ctx.fill();
       }
+      ctx.globalAlpha=1;
     }
   }
-  
-  // PARTICLE - Digital sparks
-  class Particle{
-    constructor(){
-      this.x=Math.random()*canvas.width;
-      this.y=Math.random()*canvas.height;
-      this.vx=(Math.random()-0.5)*2;
-      this.vy=(Math.random()-0.5)*2;
-      this.size=Math.random()*2+0.5;
-      this.opacity=Math.random()*0.6+0.2;
-      this.life=Math.random()*100+50;
-      this.maxLife=this.life;
-    }
-    update(){
-      this.x+=this.vx;
-      this.y+=this.vy;
-      this.life--;
-      if(this.x<0||this.x>canvas.width)this.vx*=-1;
-      if(this.y<0||this.y>canvas.height)this.vy*=-1;
-      if(this.life<=0){
-        this.x=Math.random()*canvas.width;
-        this.y=Math.random()*canvas.height;
-        this.life=this.maxLife;
-      }
-      this.opacity=this.life/this.maxLife;
-    }
-    draw(){
-      ctx.globalAlpha=this.opacity;
-      ctx.fillStyle=`hsla(180,100%,60%,1)`;
+  const comets=[];
+  if(SHOW_COMETS){
+    for(let i=0;i<5;i++){ const c=new Comet(); c.t=Math.random(); comets.push(c); }
+  }
+
+  function drawRipples(){
+    for(let i=ripples.length-1;i>=0;i--){
+      const r=ripples[i];
+      r.t+=0.035;
+      if(r.t>1){ ripples.splice(i,1); continue; }
+      const rad=r.t*70;
+      ctx.globalAlpha=(1-r.t)*0.5;
+      ctx.strokeStyle=`hsla(${GOLD_HUE},95%,70%,1)`;
+      ctx.lineWidth=1.4;
       ctx.beginPath();
-      ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-      ctx.fill();
+      ctx.arc(r.x,r.y,rad,0,Math.PI*2);
+      ctx.stroke();
     }
+    ctx.globalAlpha=1;
+    if(ripples.length>40)ripples.splice(0,ripples.length-40);
   }
-  
-  // Initialize
-  const hexCore=new HexagonCore(canvas.width/2,canvas.height/2);
-  for(let i=0;i<6;i++){
-    rayStreams.push(new RayStream((i*Math.PI/3)-Math.PI/2));
+
+  function drawCoreGlow(){
+    const cx=centerX(), cy=topY();
+    const pulse=Math.sin(time*0.02)*0.15+0.85;
+    const rad=radiusAt(0)*1.1*pulse;
+    const g=ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
+    g.addColorStop(0,`hsla(${GOLD_HUE},100%,70%,${0.4*pulse})`);
+    g.addColorStop(1,`hsla(${GOLD_HUE},100%,55%,0)`);
+    ctx.fillStyle=g;
+    ctx.beginPath();
+    ctx.arc(cx,cy,rad,0,Math.PI*2);
+    ctx.fill();
   }
-  for(let i=0;i<80;i++)particles.push(new Particle());
-  
-  // Main animation loop
-  function animate(){
-    // Deep space background
-    const bgGradient=ctx.createRadialGradient(canvas.width/2,canvas.height/2,0,canvas.width/2,canvas.height/2,Math.max(canvas.width,canvas.height)*0.7);
-    bgGradient.addColorStop(0,'#001a33');
-    bgGradient.addColorStop(0.5,'#000d1a');
-    bgGradient.addColorStop(1,'#000000');
-    ctx.fillStyle=bgGradient;
+
+  function frame(){
+    ctx.fillStyle=BACKGROUND;
     ctx.fillRect(0,0,canvas.width,canvas.height);
-    
-    // Subtle animated grid
-    ctx.globalAlpha=0.02+Math.sin(time*0.0005)*0.015;
-    ctx.strokeStyle='hsla(180,100%,50%,0.5)';
-    ctx.lineWidth=0.5;
-    const gridSize=120;
-    for(let i=0;i<canvas.width;i+=gridSize){
-      for(let j=0;j<canvas.height;j+=gridSize){
-        ctx.strokeRect(i+Math.sin(time*0.0008+i)*5,j+Math.cos(time*0.0008+j)*5,gridSize-10,gridSize-10);
-      }
+
+    if(!dragging){
+      baseRotation+=SPEED+dragVel;
+      dragVel*=FRICTION;
     }
-    ctx.globalAlpha=1;
-    
-    // Update and draw rays
-    for(const ray of rayStreams){
-      ray.update();
-      ray.draw(hexCore.x,hexCore.y);
+
+    if(REPEL&&mouseActive){
+      const targetOffX=(canvas.width/2-mouseX)*0.03;
+      const targetOffY=(canvas.height*0.4-mouseY)*0.015;
+      fieldOffX+=(targetOffX-fieldOffX)*0.05;
+      fieldOffY+=(targetOffY-fieldOffY)*0.05;
+    }else{
+      fieldOffX*=0.95; fieldOffY*=0.95;
     }
-    
-    // Update and draw hexagon core
-    hexCore.update();
-    hexCore.draw();
-    
-    // Update and draw particles
-    for(const particle of particles){
-      particle.update();
-      particle.draw();
-    }
-    
-    // Cinematic lens flares
-    ctx.globalAlpha=0.06;
-    for(let i=0;i<4;i++){
-      const flareX=canvas.width*0.2+i*0.25*canvas.width+Math.sin(time*0.001+i)*30;
-      const flareY=canvas.height*0.3+Math.cos(time*0.0008+i)*40;
-      const flareGradient=ctx.createRadialGradient(flareX,flareY,0,flareX,flareY,80);
-      flareGradient.addColorStop(0,`hsla(180,100%,60%,1)`);
-      flareGradient.addColorStop(1,`hsla(180,100%,60%,0)`);
-      ctx.fillStyle=flareGradient;
-      ctx.fillRect(flareX-100,flareY-100,200,200);
-    }
-    ctx.globalAlpha=1;
-    
+
+    drawCoreGlow();
+    drawStrands(baseRotation);
+    for(const d of dust){ d.update(baseRotation); d.draw(); }
+    for(const c of comets){ c.update(baseRotation); c.draw(); }
+    drawRipples();
+
     time++;
-    requestAnimationFrame(animate);
+    if(!reducedMotion)requestAnimationFrame(frame);
   }
-  
-  animate();
-  
-  // Resize handler
+
+  if(reducedMotion){
+    ctx.fillStyle=BACKGROUND;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    drawCoreGlow();
+    drawStrands(baseRotation);
+  }else{
+    frame();
+  }
+
   window.addEventListener('resize',()=>{
     canvas.width=window.innerWidth;
     canvas.height=window.innerHeight;
   });
 }
 
-// Initialize the premium background
-initHexagonEnergyBackground();
+// ---------------------------------------------
+// 2) FLOATING GLASS ORBS (gold/amber)
+// ---------------------------------------------
+function initFloatingOrbs(){
+  const container=document.createElement('div');
+  container.className='floating-orbs';
+  container.setAttribute('aria-hidden','true');
+  ['orb orb-1','orb orb-2','orb orb-3','orb orb-4'].forEach(cls=>{
+    const d=document.createElement('div');
+    d.className=cls;
+    container.appendChild(d);
+  });
+  document.body.prepend(container);
+}
+
+// ---------------------------------------------
+// 3) CURSOR SPOTLIGHT (gold)
+// ---------------------------------------------
+function initCursorSpotlight(){
+  const spotlight=document.createElement('div');
+  spotlight.className='cursor-spotlight';
+  spotlight.setAttribute('aria-hidden','true');
+  document.body.appendChild(spotlight);
+
+  let targetX=window.innerWidth/2, targetY=window.innerHeight/2;
+  let curX=targetX, curY=targetY;
+
+  window.addEventListener('pointermove',(e)=>{
+    targetX=e.clientX; targetY=e.clientY;
+  });
+
+  function loop(){
+    curX+=(targetX-curX)*0.15;
+    curY+=(targetY-curY)*0.15;
+    spotlight.style.setProperty('--sx',curX+'px');
+    spotlight.style.setProperty('--sy',curY+'px');
+    requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+// ---------------------------------------------
+// 4) 3D TILT ON CARDS (whole page)
+// ---------------------------------------------
+function initTiltCards(){
+  const selectors='.project-card, .github-project-card, .skill-category, .meta-item, .contact-link, .timeline-content';
+  const cards=document.querySelectorAll(selectors);
+  const MAX_TILT=10;
+
+  cards.forEach(card=>{
+    card.style.transformStyle='preserve-3d';
+    card.style.willChange='transform';
+    card.style.transition='transform 0.15s ease-out, box-shadow 0.3s ease';
+
+    card.addEventListener('mousemove',(e)=>{
+      const rect=card.getBoundingClientRect();
+      const px=(e.clientX-rect.left)/rect.width;
+      const py=(e.clientY-rect.top)/rect.height;
+      const rotateX=(0.5-py)*MAX_TILT;
+      const rotateY=(px-0.5)*MAX_TILT;
+      card.style.transform=`perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.03,1.03,1.03)`;
+    });
+    card.addEventListener('mouseleave',()=>{
+      card.style.transition='transform 0.5s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease';
+      card.style.transform='perspective(900px) rotateX(0deg) rotateY(0deg) scale3d(1,1,1)';
+    });
+    card.addEventListener('mouseenter',()=>{
+      card.style.transition='transform 0.15s ease-out, box-shadow 0.3s ease';
+    });
+  });
+}
+
+// ---------------------------------------------
+// 5) TILTING HERO PROFILE IMAGE
+// ---------------------------------------------
+function initHeroTilt(){
+  const container=document.querySelector('.profile-image-container');
+  if(!container)return;
+  container.style.transformStyle='preserve-3d';
+  container.style.willChange='transform';
+
+  let targetRX=0, targetRY=0, curRX=0, curRY=0;
+  const MAX_TILT=14;
+
+  window.addEventListener('mousemove',(e)=>{
+    const px=e.clientX/window.innerWidth;
+    const py=e.clientY/window.innerHeight;
+    targetRY=(px-0.5)*MAX_TILT*2;
+    targetRX=(0.5-py)*MAX_TILT;
+  });
+
+  function loop(){
+    curRX+=(targetRX-curRX)*0.08;
+    curRY+=(targetRY-curRY)*0.08;
+    container.style.transform=`perspective(900px) rotateX(${curRX}deg) rotateY(${curRY}deg)`;
+    requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+// ---------------------------------------------
+// INIT EVERYTHING
+// ---------------------------------------------
+initLoader();
+initGoldenTornado();
+initFloatingOrbs();
+initCursorSpotlight();
+initTiltCards();
+initHeroTilt();
+
 
 // ============================================
 // SCROLL & NAVIGATION ENHANCEMENTS

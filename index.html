@@ -7,8 +7,14 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- 3D HEXAGON ENERGY CORE CANVAS BACKGROUND -->
-    <canvas id="bg3d" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: linear-gradient(135deg, #001a33 0%, #000d1a 50%, #000000 100%);"></canvas>
+    <!-- INTRO LOADER — glowing golden BARATH, shown for 5s -->
+    <div id="loader" class="loader">
+        <div class="loader-text">BARATH</div>
+        <div class="loader-bar"></div>
+    </div>
+
+    <!-- INTERACTIVE 3D GOLD BLACK HOLE — drag to rotate/tilt, click for ripple -->
+    <canvas id="bg3d" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: #000000; cursor: grab;"></canvas>
     
     <!-- NAVIGATION BAR -->
     <nav class="navbar">
@@ -28,10 +34,6 @@
     <section class="hero">
         <div class="hero-content">
             <div class="profile-section">
-                                <div class="profile-image-container">
-                    <img src="bara.jpg" alt="Barath M" class="profile-image">
-                    <div class="profile-glow"></div>
-                </div>
                 <h1 class="hero-title">Barath M</h1>
                 <p class="subtitle">Hardware Service | Cloud Technologist | Tech Support Specialist</p>
                 <p class="hero-description">Building scalable applications with cutting-edge technologies. Specializing in cloud systems, cognitive computing, and IoT solutions.</p>
