@@ -45,7 +45,7 @@ function initGoldenBlackHole(){
 
   // ---- Props (mirrors the Originkit Black Hole controls) ----
   const GOLD_HUE=48;                 // matches #FFCC00
-  const PARTICLE_COUNT=900;
+  const PARTICLE_COUNT=window.innerWidth<768?380:900;
   const ORBIT_RADIUS_PCT=0.62;       // outer orbit radius, fraction of min(w,h)
   const INNER_RADIUS_PCT=0.09;       // event-horizon cutoff, fraction of outer
   const PARTICLE_SIZE=1.6;
