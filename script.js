@@ -179,6 +179,38 @@ function initContactForms(){
   }
 }
 
+// ---- Custom cursor (desktop only, never blocks clicks) ----
+function initCustomCursor(){
+  const isFinePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
+  if(reducedMotion || !isFinePointer) return;
+
+  const dot = document.getElementById('cursorDot');
+  if(!dot) return;
+
+  document.body.classList.add('custom-cursor-active');
+
+  let x = 0, y = 0, curX = 0, curY = 0;
+  window.addEventListener('mousemove', (e) => { x = e.clientX; y = e.clientY; });
+
+  function loop(){
+    curX += (x - curX) * 0.25;
+    curY += (y - curY) * 0.25;
+    dot.style.left = curX + 'px';
+    dot.style.top = curY + 'px';
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  document.querySelectorAll('a, button, input, select, textarea').forEach(el => {
+    el.addEventListener('mouseenter', () => dot.classList.add('hover-link'));
+    el.addEventListener('mouseleave', () => dot.classList.remove('hover-link'));
+  });
+  document.querySelectorAll('.project, .archive-card').forEach(el => {
+    el.addEventListener('mouseenter', () => dot.classList.add('hover-project'));
+    el.addEventListener('mouseleave', () => dot.classList.remove('hover-project'));
+  });
+}
+
 initNavbar();
 initMobileMenu();
 initScrollReveal();
@@ -186,3 +218,4 @@ initHeroReveal();
 initWorkFilter();
 initContactTabs();
 initContactForms();
+initCustomCursor();
