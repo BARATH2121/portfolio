@@ -635,6 +635,14 @@ section{ position:relative; padding:var(--space-16) 0; }
   position:relative;
   overflow:hidden;
 }
+.project-visual img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:top;
+  position:relative;
+  z-index:1;
+}
 .project-visual::before{
   content:'';
   position:absolute;
