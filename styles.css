@@ -161,6 +161,11 @@ button{ font:inherit; }
 
 section{ position:relative; padding:var(--space-16) 0; scroll-margin-top:100px; }
 
+/* FIX: lighter section spacing on phones */
+@media (max-width:700px){
+  section{ padding:var(--space-8) 0; }
+}
+
 /* ---------- Buttons ---------- */
 .btn{
   display:inline-flex;
@@ -349,7 +354,8 @@ section{ position:relative; padding:var(--space-16) 0; scroll-margin-top:100px; 
   letter-spacing:-.02em;
   margin-bottom:var(--space-3);
 }
-.hero-title .line{ display:block; overflow:hidden; }
+/* FIX: padding-bottom stops descenders (g, y, p) being clipped */
+.hero-title .line{ display:block; overflow:hidden; padding-bottom:.08em; }
 .hero-desc{
   color:var(--text-secondary);
   font-size:1.1rem;
@@ -921,6 +927,86 @@ section{ position:relative; padding:var(--space-16) 0; scroll-margin-top:100px; 
 }
 
 /* ============================================
+   CHANNELS (Instagram)
+   ============================================ */
+.channels-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(300px, 1fr));
+  gap:1px;
+  background:var(--border);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+}
+.channel-card{
+  display:flex;
+  flex-direction:column;
+  background:var(--bg-primary);
+  padding:var(--space-6);
+  transition:background .3s var(--ease);
+  position:relative;
+}
+.channel-card:hover{ background:var(--card); }
+.channel-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:var(--space-3);
+}
+.channel-icon{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:44px; height:44px;
+  border-radius:var(--radius-sm);
+  background:var(--accent-soft);
+  border:1px solid var(--border-strong);
+  color:var(--accent);
+  transition:all .25s var(--ease);
+}
+.channel-card:hover .channel-icon{
+  background:var(--accent);
+  color:#fff;
+  box-shadow:0 8px 24px var(--accent-glow);
+}
+.channel-title{
+  font-family:var(--font-heading);
+  font-weight:600;
+  font-size:1.5rem;
+  letter-spacing:-.01em;
+  margin-bottom:.2rem;
+}
+.channel-handle{
+  font-family:var(--font-mono);
+  font-size:.82rem;
+  color:var(--accent);
+  margin-bottom:var(--space-2);
+}
+.channel-desc{
+  color:var(--text-secondary);
+  font-size:.98rem;
+  line-height:1.75;
+  margin-bottom:var(--space-3);
+}
+.channel-card .project-tech{ margin-bottom:var(--space-3); }
+.channel-cta{
+  margin-top:auto;
+  font-family:var(--font-mono);
+  font-size:.82rem;
+  color:var(--text-secondary);
+  display:inline-flex;
+  align-items:center;
+  gap:.4rem;
+  transition:all .25s ease;
+}
+.channel-card:hover .channel-cta{ color:var(--accent); gap:.65rem; }
+
+@media (max-width:700px){
+  .channels-grid{ grid-template-columns:1fr; }
+  .channel-card{ padding:var(--space-4); }
+}
+
+/* ============================================
    CONTACT
    ============================================ */
 .contact-wrap{
@@ -1180,7 +1266,8 @@ body.custom-cursor-active .cursor-dot{ display:block; }
 .status-completed{ color:#22c55e; border-color:rgba(34,197,94,.35); }
 .status-in-development{ color:var(--accent); border-color:rgba(124,58,237,.4); }
 .status-prototype{ color:#f59e0b; border-color:rgba(245,158,11,.35); }
-.status-experimental{ color:#71717A; border-color:var(--border-strong); }
+/* FIX: lighter grey for better contrast (was #71717A) */
+.status-experimental{ color:#8A8A94; border-color:var(--border-strong); }
 .status-planned{ color:var(--text-muted); border-color:var(--border); }
 
 /* ============================================
